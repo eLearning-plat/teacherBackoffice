@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
-  // { path: "/",  name:'dashBord', component:()=>import('../pages/dashbord/dashBord.vue')},
+  { path: "/blogs",  name:'blogPage', component:()=>import('../pages/blog/blogPage.vue')},
  
   { path: "/course", name: 'coursePage', component: () => import('../pages/courses/courseS.vue') },
  

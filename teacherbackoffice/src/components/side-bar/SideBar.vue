@@ -30,11 +30,13 @@ const menuItems = ref([
   {
     label: t("Student space"), 
     items: [
+      
       { label: t('dashbord'), icon: "pi pi-objects-column" },
       { label: t('course'), icon: "pi pi-book" },
       { label: t('profile'), icon: "pi pi-user" },
       { label: t('document'), icon: "pi pi-briefcase" },
       { label: t('event'), icon: "pi pi-calendar" },
+      { label: t('blogs'), icon: "pi pi-book" },
     ],
   },
 ]);

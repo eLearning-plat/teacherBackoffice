@@ -1,65 +1,77 @@
 <template>
-  <div>  
-    <Breadcrumb :home="home" :model="items" />
+  <div>
     <div class="demo-app w-full flex flex-col mt-2 md:flex-row">
-    <!-- Sidebar -->
- <div class="demo-app-sidebar md:w-300px bg-gray-600 border-r-1 border-gray-600">
-      <div class="demo-app-sidebar-section md:block hidden">
-        <!-- Toggle des weekends -->
-        <label class="text-white">
-          <input
-            type="checkbox"
-            :checked="calendarOptions.weekends"
-            @change="handleWeekendsToggle"
-          />
-          {{$t('Toggle weekends')}}
-        </label>
+      <!-- Sidebar -->
+      <div class="demo-app-sidebar md:w-300px bg-gray-600 border-r-1 border-gray-600">
+        <div class="demo-app-sidebar-section md:block hidden">
+          <!-- Toggle des weekends -->
+          <label class="text-white">
+            <input
+              type="checkbox"
+              :checked="calendarOptions.weekends"
+              @change="handleWeekendsToggle"
+            />
+            {{$t('Toggle weekends')}}
+          </label>
+        </div>
+        <div class="demo-app-sidebar-section md:block hidden text-white">
+          <!-- Tous les événements -->
+          <h2 class="mb-2 ">{{$t('All Events')}} ({{ currentEvents.length }})</h2>
+          <ul>
+            <li v-for="event in currentEvents" :key="event.id" class="mb-1">
+              <b>{{ event.startStr }}</b>
+              <i>{{ event.title }}</i>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="demo-app-sidebar-section md:block hidden text-white">
-        <!-- Tous les événements -->
-        <h2 class="mb-2 ">{{$t('All Events')}} ({{ currentEvents.length }})</h2>
-        <ul>
-          <li v-for="event in currentEvents" :key="event.id" class="mb-1">
-            <b>{{ event.startStr }}</b>
-            <i>{{ event.title }}</i>
-          </li>
-        </ul>
+      
+      <!-- Main Content -->
+      <div class="demo-app-main flex-grow p-4">
+        <FullCalendar
+          class="demo-app-calendar"
+          :options="calendarOptions"
+          ref="calendarRef"
+          @calendarApi="setCalendarApi"
+        >
+          <template v-slot:eventContent="arg">
+            <b>{{ arg.timeText }}</b>
+            <i>{{ arg.event.title }}</i>
+          </template>
+        </FullCalendar>
       </div>
     </div>
     
-    <!-- Main Content -->
-    <div class="demo-app-main flex-grow p-4">
-      <FullCalendar
-    class="demo-app-calendar"
-    :options="calendarOptions"
-  >
-    <template v-slot:eventContent="arg">
-      <b>{{ arg.timeText }}</b>
-      <i>{{ arg.event.title }}</i>
-    </template>
-  </FullCalendar>
-    </div>
+  
+      
+    <EventCreationModal
+      :isOpen="isModalOpen"
+      :eventDetails="eventDetails"
+      @close="handleCloseModal"
+      @add-event="handleAddEvent"
+    />
+
+    <EventEditModal
+      :isOpen="isEditModalOpen"
+      :currentEventDetails="currentEventDetails"
+      @close="handleCloseEditModal"
+      @update-event="handleUpdateEvent"
+    />
   </div>
-  </div>
- 
 </template>
 
+
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { createEventId } from './event-utils';
-import Breadcrumb from "primevue/breadcrumb";
-const home = ref({
-  icon: "pi pi-home",
-});
-const items = ref([
-  { label: "Event" },
+import EventCreationModal from '@/components/modal/EventCreationModal.vue';
+import EventEditModal from '@/components/modal/EventEditModal.vue';
 
-]);
 const { t } = useI18n();
 
 const todayStr = new Date().toISOString().split('T')[0];
@@ -76,11 +88,11 @@ const INITIAL_EVENTS = [
   },
 ];
 
-const calendarOptions = {
+const calendarOptions = ref({
   plugins: [
     dayGridPlugin,
     timeGridPlugin,
-    interactionPlugin // needed for dateClick
+    interactionPlugin
   ],
   buttonText: {
     today: t('today'),
@@ -93,7 +105,7 @@ const calendarOptions = {
     center: 'title',
     right: 'dayGridMonth,timeGridWeek,timeGridDay'
   },
-  locale: 'ar',
+  locale: 'en',
   dayNames: t('dayNames'),
   monthNames: t('monthNames'),
   initialView: 'dayGridMonth',
@@ -106,42 +118,68 @@ const calendarOptions = {
   select: handleDateSelect,
   eventClick: handleEventClick,
   eventsSet: handleEvents,
-};
+});
 
-let currentEvents = ref([]);
+const calendarRef = ref(null);
+const currentEvents = ref([]);
 
-function handleWeekendsToggle() {
-  calendarOptions.weekends = !calendarOptions.weekends; // update a property
-}
+const isModalOpen = ref(false);
+const isEditModalOpen = ref(false);
+const eventDetails = ref({});
+const currentEventDetails = ref({});
 
 function handleDateSelect(selectInfo) {
-  let title = prompt('Please enter a new title for your event');
-  let calendarApi = selectInfo.view.calendar;
-
-  calendarApi.unselect(); // clear date selection
-
-  if (title) {
-    calendarApi.addEvent({
-      id: createEventId(),
-      title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay
-    });
-  }
+  eventDetails.value = {
+    start: selectInfo.startStr,
+    end: selectInfo.endStr,
+    allDay: selectInfo.allDay
+  };
+  isModalOpen.value = true;
 }
 
 function handleEventClick(clickInfo) {
-  if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    clickInfo.event.remove();
-  }
+  currentEventDetails.value = {
+    id: clickInfo.event.id,
+    title: clickInfo.event.title,
+    start: clickInfo.event.startStr,
+    end: clickInfo.event.endStr,
+    allDay: clickInfo.event.allDay,
+    description: clickInfo.event.extendedProps.description || ''
+  };
+  isEditModalOpen.value = true;
 }
 
 function handleEvents(events) {
   currentEvents.value = events;
 }
-</script>
 
+function handleCloseModal() {
+  isModalOpen.value = false;
+}
+
+function handleAddEvent(newEvent) {
+  calendarRef.value.getApi().addEvent(newEvent);
+  isModalOpen.value = false;
+}
+
+function handleCloseEditModal() {
+  isEditModalOpen.value = false;
+}
+
+function handleUpdateEvent(updatedEvent) {
+  const event = calendarRef.value.getApi().getEventById(updatedEvent.id);
+  event.setProp('title', updatedEvent.title);
+  event.setStart(updatedEvent.start);
+  event.setEnd(updatedEvent.end);
+  event.setExtendedProp('description', updatedEvent.description);
+  event.setAllDay(updatedEvent.allDay);
+  isEditModalOpen.value = false;
+}
+
+onMounted(() => {
+  console.log('Calendar component mounted');
+});
+</script>
 
 <style lang='css'>
 
