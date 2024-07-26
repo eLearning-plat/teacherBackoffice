@@ -118,7 +118,7 @@ export default {
 
     const items = ref([
       {
-        label: "Student Space",
+        label: "Teacher Space",
         items: [
           {
             section: "Dashboard",
@@ -172,7 +172,7 @@ export default {
             link: "/event",
           },
           {
-            section: "Corners",
+            section: "Blogs",
             icon: "Video",
             link: "/blogs",
           },
