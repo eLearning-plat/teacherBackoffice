@@ -54,6 +54,7 @@ import {
   ChevronLeft,
   Search
 } from 'lucide-vue-next'
+import { mapState, mapActions } from 'vuex';
 import Input from '../../components/ui/input/Input.vue';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '../../components/ui/select';
 import BreadCrumb from '../../components/bread-crumb/BreadCrumb.vue';
@@ -94,6 +95,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions('courses', ['fetchCourses']),
     goToDetails(){
     return this.$router.push('/courseDetails');
   },
@@ -111,7 +113,17 @@ export default {
       this.closeModal();
     }
   },
+  created() {
+    console.log('Component created');
+    this.fetchCourses()
+      .then(() => {
+        console.log('Courses fetched:', this.courses);
+      })
+      .catch(error => {
+        console.error('Error fetching courses:', error);
+      });},
   computed: {
+    ...mapState('courses', ['courses']),
     filteredItems() {
       const query = this.searchQuery.toLowerCase();
       return this.details.filter(item => 
