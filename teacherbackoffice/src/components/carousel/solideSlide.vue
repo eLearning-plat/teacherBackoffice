@@ -8,7 +8,7 @@
         
           <SplideSlide v-for="(detail, index) in details" :key="index">
             <div class="container mx-auto grid grid-cols-1">
-              <cardCours :detail="detail" />
+              <cardCourseTeacher :detail="detail" />
             </div>
           </SplideSlide>
         </Splide>

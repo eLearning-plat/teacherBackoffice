@@ -5,14 +5,19 @@
               >
           
                 <div>
-                <div class="flex justify-between">  <h3 class="font-medium group-hover:underline">Guide de recherche documentaire</h3><span as="button" class="pi pi-download"></span></div>
+                <div class="flex justify-between">  <h3 class="font-medium group-hover:underline">Guide de recherche documentaire</h3><Download class=""/></div>
                   <p class="text-sm text-muted-foreground ">Apprenez à effectuer des recherches efficaces.</p>
                 </div>
               </div>
               
 </template>
 <script>
+import { Download } from 'lucide-vue-next';
+
 export default {
-    name: 'cardsDocument'
+    name: 'cardsDocument',
+    components:{
+      Download
+    }
 }
 </script>

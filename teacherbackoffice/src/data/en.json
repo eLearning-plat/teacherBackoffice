@@ -61,7 +61,14 @@
     "Skills":"Skills",
     "dayNames": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     "monthNames": ["Janua1111ry", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    "list":"list"
+    "list":"list",
+    "Add courses":"Add courses",
+    "Update":"Update",
+    "Delete":"Delete",
+    "Delete courses":"Delete courses",
+    " Add Document":" Add Document",
+    "blogs":"blogs",
+    "agenda":"agenda"
  
   }
   

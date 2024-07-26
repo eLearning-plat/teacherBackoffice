@@ -1,6 +1,6 @@
 <template>
   <div>
- <Breadcrumb :home="home" :model="items" class="mb-2" />
+
   <div class="w-full gap-8 overflow-auto">
    
     <div class="grid gap-4">
@@ -15,9 +15,29 @@
 
     <div
       class="grid gap-6 p-4 border-gray-200 rounded-md border-1 mt-3 shadow-md"
-    >
+    > 
+ <div class="flex justify-end"> 
+    <Button
+              variant="outline"
+              size="sm"
+              class="border-2 border-blue-500 px-4 py-2 bg-blue-500  text-white rounded-lg"
+              @click="openModal"
+            >
+            {{ $t('Add courses') }}
+            </Button>
+            <ModalAddChaptrCourse
+      v-if="isModalOpen"
+      :isOpen="isModalOpen"
+      imageSrc="@/assets/vuex.png"
+      title="Add New Course"
+      description="Fill in the details to add a new course."
+      buttonText="Add Course"
+      @add-course="addCourse"
+      @close="closeModal"
+    />
+            </div>
       <div>
-        <h2 class="text-xl font-bold text-sky-500">Course Materials</h2>
+        <h2 class="text-xl font-bold text-sky-500">Course</h2>
         <div class="mt-4 grid gap-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -29,15 +49,27 @@
                 <p class="text-sm text-muted-foreground">
                   Completed on May 15, 2023
                 </p>
+             
               </div>
             </div>
             <Button
               variant="outline"
               size="sm"
-              class="border-2 pi pi-lock-open border-blue-500 px-4 py-2 bg-white text-blue-500 rounded-lg"
+              class="border-2   border-blue-500 px-4 py-2 bg-white text-blue-500 rounded-lg" 
+               @click="openModal"
             >
-              Review
+              Update
             </Button>
+            <ModalUpdateCourse
+      v-if="isModalOpen"
+      :isOpen="isModalOpen"
+      imageSrc="@/assets/vuex.png"
+      title="Update Course"
+      description="Fill in the details to update a course."
+      buttonText="Update Course"
+      @add-course="addCourse"
+      @close="closeModal"
+    />
           </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -54,9 +86,9 @@
             <Button
               variant="outline"
               size="sm"
-              class="border-2 rounded-lg pi pi-eye border-blue-500 px-4 py-2 text-blue-500"
+              class="border-2 rounded-lg  border-blue-500 px-4 py-2 text-blue-500"
             >
-              Review
+              Update
             </Button>
           </div>
           <div class="flex items-center justify-between">
@@ -66,15 +98,15 @@
               </div>
               <div>
                 <div class="font-bold">JavaScript Fundamentals</div>
-                <p class="text-sm text-muted-foreground">Not started</p>
+                <p class="text-sm text-muted-foreground">Not Updateed</p>
               </div>
             </div>
             <Button
               variant="outline"
-              class="border-2  pi pi-eye-slash shadow-slate-500 rounded-md border-green-500 px-4 py-2  text-green-500"
+              class="border-2   shadow-slate-500 rounded-md border-blue-500 px-4 py-2  text-blue-500"
               size="sm"
             >
-              Start
+              Update
             </Button>
           </div>
         </div>
@@ -98,9 +130,9 @@
             <Button
               variant="outline"
               size="sm"
-              class="border-2 pi pi-lock-open shadow-slate-500 rounded-md border-green-500 px-4 py-2  text-green-500"
+              class="border-2   shadow-slate-500 rounded-md border-blue-500 px-4 py-2  text-blue-500"
             >
-              View
+              Update
             </Button>
           </div>
           <div class="flex items-center justify-between">
@@ -118,36 +150,34 @@
             <Button
               variant="outline"
               size="sm"
-              class="border-2 rounded-md pi pi-lock border-gray-500 px-4 py-2 text-gray"
+              class="border-2 rounded-md  border-blue-500 px-4 py-2 text-blue-500"
             >
-              View
+              Update
             </Button>
           </div>
         </div>
       </div>
     </div>
 
-    <div  class=" mt-3 p-4 rounded-md border-2 shadow-md grid gap-6">
-      <h2 class="text-xl text-sky-500 font-bold my-4" >Suggested Courses</h2>
-  
-     <solideSlide/>
-      
-
-    </div>
   </div></div>
 </template>
 
 <script>
-import Breadcrumb from "primevue/breadcrumb";
+
+import ModalAddChaptrCourse from '@/components/modal/updateChap.vue';
+import ModalUpdateCourse from '@/components/modal/updateOneCourse.vue';
+
 import solideSlide from '@/components/carousel/solideSlide.vue';
 export default {
   name: "coursDetails",
   components: {
     solideSlide,
-    Breadcrumb,
+    ModalAddChaptrCourse,
+    ModalUpdateCourse
   },
   data() {
     return {
+      isModalOpen: false,
       details: [
         {
           title: "Detail 1",
@@ -177,6 +207,18 @@ export default {
       
     };
   },
+  methods: {
+    openModal() {
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      this.isModalOpen = false;
+    },
+    addCourse() {
+      // Logic to add course
+      this.closeModal();
+    }
+  }
 };
 </script>
 
