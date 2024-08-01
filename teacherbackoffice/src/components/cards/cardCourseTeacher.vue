@@ -7,8 +7,8 @@
     <div class="grid-container">
       <div class="image-container">
         <img
-          src="@/assets/nest.png"
-          alt="Course thumbnail"
+          :src="detail.imageUrl"
+          alt="Course"
           width="300"
           height="200"
           class="image"
@@ -35,14 +35,11 @@
   <h1 class="font-bold mx-2">{{ detail.title }}</h1>
   
   <div class="flex gap-2 mt-2 mx-2">
-    <Button size="sm" class="bg-blue-500 text-white rounded-md px-2 py-1" @click="push()">Details</Button>
-    <Button size="sm" variant="outline" class="border px-2 py-1  rounded">
+    <Button size="sm" class="bg-blue-500 text-white rounded-md px-2 py-1" @click="push(detail._id)">Details</Button>
+    <Button size="sm" variant="outline" class="border px-2 py-1  rounded"  @click="deleteCourse">
       Delete
     </Button>
   </div>
-
-
-
   </CardContent>  </Card>
   </Card>
 </template>
@@ -52,6 +49,8 @@ import { List, Clock, Star } from 'lucide-vue-next';
 import CardContent from '@/components/ui/card/CardContent.vue'
 import Card from '@/components/ui/card/Card.vue'
 import CardFooter from '@/components/ui/card/CardFooter.vue'
+import { useAuth0 } from '@auth0/auth0-vue';
+
 export default {
   name: 'cardCourseTeacher',
   components: {
@@ -67,15 +66,32 @@ export default {
       type: Object,
       required: true,
     },
+    
   },
+  setup() {
+      const { user } = useAuth0();
+console.log('user', user)  
+  return {
+        login: () => {
+          loginWithRedirect();
+        },
+        user
+      };
+    },
   methods: {
-    push(){
-      this.$router.push('/courseDetails')
+    push(courseId){
+      console.log(courseId)
+      this.$router.push(`/courseDetails/${courseId}`);
+      
     },
     goToDetails() {
       this.$emit(this.go-to-details);
     },
+    deleteCourse() {
+      this.$emit('deleteCourse', this.detail._id);
+    }
   },
+
 };
 
 </script>

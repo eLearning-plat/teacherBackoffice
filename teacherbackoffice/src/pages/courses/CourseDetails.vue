@@ -12,7 +12,35 @@ import CourseDetails from '../../components/courses/course-details/CourseDetails
 import CourseStatus from '../../components/courses/course-status/CourseStatus.vue'
 import CourseCategory from '../../components/courses/course-category/CourseCategory.vue'
 import CourseImages from '../../components/courses/course-images/CourseImages.vue'
+import { useRoute } from 'vue-router';
+import {ref, onMounted ,computed , watch} from 'vue';
+import { useStore } from 'vuex';
+import CourseDesciption from '../../components/courses/course-Desciption/CourseDesciption.vue'
+import { defineProps } from 'vue';
 
+const props = defineProps({
+  courseDetail: Object,
+});
+const route = useRoute();
+const courseId = route.params.id;
+const course = ref(null);
+const store = useStore();
+const courses = computed(() => store.state.courses.courses);
+
+onMounted(async () => {
+  try {
+    course.value = await store.dispatch('courses/getCourseById', courseId);
+    console.log('Fetched course:', course.value);
+  } catch (error) {
+    console.error('Error fetching course details:', error);
+  }
+});
+
+watch(courses, (newCourses) => {
+  const fetchedCourse = newCourses.find(course => course.id === courseId);
+  course.value = fetchedCourse || null;
+  console.log('Updated course:', course.value);
+});
 const links=[
     {
         id: 1,
@@ -26,6 +54,7 @@ const links=[
     },
 ]
 const page = "Course details"
+
 </script>
 
 <template>
@@ -43,18 +72,19 @@ const page = "Course details"
               <span class="sr-only">Back</span>
             </Button>
             <h1 class="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Details
+              Details 
             </h1>
           </div>
           <div class="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
             <div class="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <CourseDetails/>
-              <CourseCategory/>
+              <CourseDetails :courseDetail="course"/>
+              <CourseCategory :courseDetail="course"/>
             </div>
             <div class="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <CourseStatus/>
-              <CourseImages/>
+              <CourseStatus :courseDetail="course"/>
+              <CourseImages :courseDetail="course"/>
             </div>
+            <CourseDesciption :courseDetail="course"/>
           </div>
           <div class="flex items-center justify-center gap-2 md:hidden">
             <Button variant="outline" size="sm">

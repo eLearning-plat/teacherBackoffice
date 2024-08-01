@@ -21,6 +21,8 @@
 import asideBar from '@/components/bogs/asideBar.vue';
 import blogModal from '@/components/modal/blogModal.vue';
 import cardBlog from '@/components/cards/cardBlog.vue';
+import { mapActions, mapState } from 'vuex';
+
 export default {
   name: "blogPage",
   components: {
@@ -34,18 +36,26 @@ export default {
     };
   },
   methods: {
+    ...mapActions('blogs', ['fetchBlogs']),
     openModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
     }
+  },
+  created() {
+    console.log('component created');
+    this.fetchBlogs()
+      .then(() => {
+        console.log('blogs fetched', this.blogs);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  },
+  computed: {
+    ...mapState('blogs', ['blogs'])
   }
 };
 </script>
-<style scoped>
-.highte{
-  height: 100vh;
-  
-}
-</style>

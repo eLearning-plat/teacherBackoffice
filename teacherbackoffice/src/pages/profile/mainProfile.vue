@@ -1,19 +1,21 @@
 <template>
-  <div class="flex flex-col gap-6 w-full rounded-md container">
-    <BreadCrumb :links="links" :page="page" class="mt-3" />
-    <HeaderPage class="mt-4" />
     <div class="w-full mx-auto">
       <div class="grid gap-4">
-        <AboutPage />
+        <div class="grid">
+          <div class="grid">
+            <AboutPage />
+          </div>
+        </div>
+
         <Card class="px-0 mb-4">
           <CardHeader class="font-medium">Courses</CardHeader>
-          <tabCours />
+          <CardContent class="">
+            <tabCours />
+          </CardContent>
         </Card>
       </div>
     </div>
-  </div>
 </template>
-
 <script>
 import cardCourseTeacher from "@/components/cards/cardCourseTeacher.vue";
 import { RouterLink } from "vue-router";
@@ -34,7 +36,7 @@ import AccordionItem from "../../components/ui/accordion/AccordionItem.vue";
 import BreadCrumb from "../../components/bread-crumb/BreadCrumb.vue";
 
 export default {
-  name: "profilePage",
+  
   components: {
     blogCarousel,
     BreadCrumb,

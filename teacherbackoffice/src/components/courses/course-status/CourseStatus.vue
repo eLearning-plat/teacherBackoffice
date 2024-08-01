@@ -8,6 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  courseDetail: {
+    type: Object,
+    required: true
+  }
+});
 </script>
 
 <template>
@@ -16,21 +24,7 @@ import {
       <CardTitle>Course Category</CardTitle>
     </CardHeader>
     <CardContent>
-      Sona
-      <!-- <div class="grid gap-6">
-        <div class="grid gap-3">
-          <Label for="status">Status</Label>
-          <Select>
-            <SelectTrigger id="status" aria-label="Select status">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="accepted"> Accepeted </SelectItem>
-              <SelectItem value="not-accepted"> Not Accepted </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div> -->
+   
     </CardContent>
   </Card>
 </template>

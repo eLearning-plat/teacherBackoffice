@@ -1,7 +1,14 @@
 <template>
          <aside class="bg-background p-3 h-full rounded-lg shadow">
         <div class="mb-6">
-          <h3 class="text-xl font-bold mb-2 text-blue-500">Search</h3>
+          <button
+     class="my-2 bg-blue-600 border-2 border-blue-600 shadow-md rounded-md p-2 w-full text-white"
+     @click="push()"
+   >
+     <span class="text-white pi pi-plus"></span>
+     Add Blog
+   </button>
+          <!-- <h3 class="text-xl font-bold mb-2 text-blue-500">Search</h3> -->
           <div class="relative">
             <div
               class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
@@ -17,7 +24,7 @@
           </div>
         </div>
         <div>
-          <h3 class="text-xl font-bold mb-2 text-blue-500">Categories</h3>
+          <div class="text-xl font-bold mb-2 text-blue-500">Categories</div>
           <ul class=" p-0 space-y-1">
       <li v-for="category in categories" :key="category.label">
         <label class="flex items-center space-x-2">
@@ -36,6 +43,8 @@
       </aside>
 </template>
 <script>
+import Button from '../ui/button/Button.vue'
+
 export default {
     name:"asideBar",
     data() {

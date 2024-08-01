@@ -1,5 +1,4 @@
 <template>
-  <!-- Tableau de documents avec condition d'overflow -->
   <div class="mt-2" :class="{ 'overflow-auto': documentsHeight > 2 }">
     <div class="grid grid-cols-1 gap-2" ref="documentsContainer">
       <div v-for="document in documents" :key="document.id" class="p-2 flex">
@@ -54,9 +53,5 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* Styles supplémentaires si nécessaire */
-</style>
 
 

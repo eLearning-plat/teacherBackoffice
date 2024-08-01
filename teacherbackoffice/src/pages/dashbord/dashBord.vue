@@ -31,16 +31,7 @@ import cardMeetingDashboard from '@/components/cards/cardMeetingDashboard.vue'
       
       </nav>
       <Sheet>
-        <SheetTrigger as-child>
-          <Button
-            variant="outline"
-            size="icon"
-            class="shrink-0 md:hidden"
-          >
-            <Menu class="h-5 w-5" />
-            <span class="sr-only">Toggle navigation menu</span>
-          </Button>
-        </SheetTrigger>
+       
         <SheetContent side="left">
           <nav class="grid gap-6 text-lg font-medium">
             <a
@@ -68,22 +59,7 @@ import cardMeetingDashboard from '@/components/cards/cardMeetingDashboard.vue'
             />
           </div>
         </form>
-        <!-- <DropdownMenu>
-          <DropdownMenuTrigger as-child>
-            <Button variant="secondary" size="icon" class="rounded-full">
-              <CircleUser class="h-5 w-5" />
-              <span class="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu> -->
+       
       </div>
     </header>
     <main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 ">

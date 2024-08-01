@@ -15,6 +15,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  courseDetail: {
+    type: Object,
+    required: true
+  }
+});
+
 </script>
 
 <template>
@@ -29,30 +38,10 @@ import {
           alt="Product image"
           class="aspect-square w-full rounded-md object-cover"
           height="300"
-          src="@/assets/vue.svg"
+          :src="courseDetail.imageUrl"
           width="300"
         />
-        <div class="grid grid-cols-3 gap-2">
-          <button>
-            <img
-              alt="Product image"
-              class="aspect-square w-full rounded-md object-cover"
-              height="84"
-              src="@/assets/vue.svg"
-              width="84"
-            />
-          </button>
-          <button>
-            <img
-              alt="Product image"
-              class="aspect-square w-full rounded-md object-cover"
-              height="84"
-              src="@/assets/vue.svg"
-              width="84"
-            />
-          </button>
-        
-        </div>
+       
       </div>
     </CardContent>
   </Card>

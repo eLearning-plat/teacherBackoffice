@@ -8,6 +8,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
+import { defineProps, watch, defineEmits, ref } from "vue";
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      category: '',
+    }),
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const category = ref({ ...props.modelValue });
+
+watch(category, (newValue) => {
+  emit('update:modelValue', newValue);
+}, { deep: true });
 </script>
 
 <template>
@@ -19,7 +36,7 @@ import {
       <div class="grid gap-6 sm:grid-cols-3">
         <div class="grid gap-3">
           <Label for="category">Category</Label>
-          <Select>
+          <Select v-model="category.category">
             <SelectTrigger id="category" aria-label="Select category">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>

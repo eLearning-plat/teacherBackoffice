@@ -19,15 +19,7 @@ import {
       <div class="grid gap-6">
         <div class="grid gap-3">
           <Label for="status">Status</Label>
-          <Select>
-            <SelectTrigger id="status" aria-label="Select status">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="accepted"> Accepeted </SelectItem>
-              <SelectItem value="not-accepted"> Not Accepted </SelectItem>
-            </SelectContent>
-          </Select>
+        <h6>waiting</h6>  
         </div>
       </div> 
     </CardContent>

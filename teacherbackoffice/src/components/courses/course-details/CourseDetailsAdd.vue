@@ -1,12 +1,39 @@
 <script setup lang="js">
+import { ref, defineEmits, defineProps, watch } from 'vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
 import { Textarea } from '../../ui/textarea';
 
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      title: '',
+      image: null,
+      description: '',
+    }),
+  },
+});
 
+const emit = defineEmits(['update:modelValue']);
 
+const courseDetails = ref({ ...props.modelValue });
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  console.log('Selected file:', file);
+  if (file) {
+    courseDetails.value.image = file;
+    emit('update:modelValue', { ...courseDetails.value });
+  }
+}
+
+watch(courseDetails, (newValue) => {
+  emit('update:modelValue', newValue);
+}, { deep: true });
 </script>
+
 
 <template>
   <Card>
@@ -19,21 +46,21 @@ import { Textarea } from '../../ui/textarea';
     <CardContent>
       <div class="grid gap-6">
         <div class="grid gap-3">
-          <Label for="name">Name</Label>
+          <Label for="title">title</Label>
           <Input
-            id="name"
+            id="title"
             type="text"
             class="w-full"
-            default-value="Gamer Gear Pro Controller"
+            v-model="courseDetails.title"
           />
         </div>
         <div class="grid gap-3">
-          <Label for="name">Uplode </Label>
+          <Label for="file-upload">Upload</Label>
           <Input
-            id="name"
+            id="file-upload"
             type="file"
             class="w-full"
-            default-value="Gamer Gear Pro Controller"
+            @change="handleFileChange"
           />
         </div>
         <div class="grid gap-3">
@@ -41,6 +68,7 @@ import { Textarea } from '../../ui/textarea';
           <Textarea
             id="description"
             class="min-h-32"
+            v-model="courseDetails.description"
           />
         </div>
       </div>
