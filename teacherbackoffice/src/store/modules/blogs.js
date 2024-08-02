@@ -1,6 +1,6 @@
 // store/modules/blogs.js
 import axios from 'axios';
-
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 const state = {
   blogs: []
 };
@@ -25,7 +25,7 @@ const mutations = {
 
 const actions = {
   fetchBlogs({ commit }) {
-    return axios.get('http://localhost:3000/api/blogs')
+    return axios.get(`${apiUrl}/blogs`)
       .then(response => {
         commit('SET_BLOGS', response.data);
       })
@@ -36,7 +36,7 @@ const actions = {
   async addBlogs({ dispatch }, bnewBlogs) {
     try {
       console.log('bnewBlogs', bnewBlogs)
-      const res = await axios.post('http://localhost:3000/api/blogs', bnewBlogs, {
+      const res = await axios.post(`${apiUrl}/blogs`, bnewBlogs, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -54,7 +54,7 @@ const actions = {
   async updateBlogs({ commit }, { id, updatedData }) {
     
       try{
-      await axios.put(`http://localhost:3000/api/blogs/${id}`, updatedData)
+      await axios.put(`${apiUrl}/blogs/${id}`, updatedData)
         commit('UPDATE_BLOGS', updatedblogs);
       }
       catch(error){
@@ -62,7 +62,7 @@ const actions = {
       };
   },
  async deleteblogs({ commit , dispatch}, blogId) {
-    return await axios.delete(`http://localhost:3000/api/blogs/${blogId}`)
+    return await axios.delete(`${apiUrl}/blogs/${blogId}`)
 
       .then(async() => {
         await dispatch('fetchBlogs'); 

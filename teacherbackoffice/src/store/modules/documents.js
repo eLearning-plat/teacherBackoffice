@@ -1,5 +1,7 @@
-// store/modules/documents.js
 import axios from 'axios';
+
+const apiUrl = import.meta.env.VITE_APP_API_URL;
+console.log('API URL:', apiUrl);
 
 const state = {
   documents: []
@@ -9,73 +11,68 @@ const mutations = {
   SET_DOCUMENTS(state, documents) {
     state.documents = documents;
   },
-  ADD_DOCUMENTS(state, documents) {
-    state.documents.push(documents);
+  ADD_DOCUMENT(state, document) {
+    state.documents.push(document);
   },
-  UPDATE_DOCUMENTS(state, updatedDocuments) {
-    const index = state.documents.findIndex(document => document.id === updatedDocuments.id);
+  UPDATE_DOCUMENT(state, updatedDocument) {
+    const index = state.documents.findIndex(document => document.id === updatedDocument.id);
     if (index !== -1) {
-      state.documents.splice(index, 1, updatedDocuments);
+      state.documents.splice(index, 1, updatedDocument);
     }
   },
-  DELETE_DOCUMENTS(state, documentId) {
+  DELETE_DOCUMENT(state, documentId) {
     state.documents = state.documents.filter(document => document.id !== documentId);
   }
 };
 
 const actions = {
-  fetchDocuments({ commit }, queryParams={}) {
-    console.log('param ',queryParams )
-    return axios.get('http://localhost:3000/api/documents',{params:queryParams})
-   
+  fetchDocuments({ commit }, queryParams = {}) {
+    console.log('param', queryParams);
+    return axios.get(`${apiUrl}/documents`, { params: queryParams })
       .then(response => {
-        console.log('response', response.data)
+        console.log('response', response.data);
         commit('SET_DOCUMENTS', response.data);
       })
       .catch(error => {
         console.error('There was an error fetching the documents:', error);
       });
   },
-  async addDocument({ dispatch }, { newDocument, categoryID,courseID }) {
+  async addDocument({ dispatch }, { newDocument, categoryID, courseID }) {
     try {
       console.log('newDocument', newDocument);
-      const res = await axios.post('http://localhost:3000/api/documents', newDocument, {
+      const res = await axios.post(`${apiUrl}/documents`, newDocument, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+
       console.log('res.data', res.data);
       console.log('categoryID', categoryID);
-      console.log('categoryID', courseID);
-      await dispatch('fetchDocuments', { categoryID,courseID });
+      console.log('courseID', courseID);
+      await dispatch('fetchDocuments', { categoryID, courseID });
       return res.data;
     } catch (error) {
       console.error('Error adding document:', error);
-      throw error; 
+      throw error;
     }
-  },  
-
-  async updatedocuments({ commit }, { id, updatedData }) {
-    
-      try{
-      await axios.put(`http://localhost:3000/api/documents/${id}`, updatedData)
-        commit('UPDATE_DOCUMENTS', updatedDocuments);
-      }
-      catch(error){
-    
-      };
   },
- async deletedocuments({ commit , dispatch}, documentId) {
-    return await axios.delete(`http://localhost:3000/api/documents/${documentId}`)
-
-      .then(async() => {
-        await dispatch('fetchDocuments'); 
-        commit('DELETE_DOCUMENTS', documentId);
-      })
-      .catch(error => {
-        console.error('There was an error deleting the documents:', error);
-      });
+  async updatedocuments({ commit }, { id, updatedData }) {
+    try {
+      const response = await axios.put(`${apiUrl}/documents/${id}`, updatedData);
+      commit('UPDATE_DOCUMENT', response.data);
+    } catch (error) {
+      console.error('Error updating document:', error);
+      throw error;
+    }
+  },
+  async deletedocuments({ commit, dispatch }, documentId) {
+    try {
+      await axios.delete(`${apiUrl}/documents/${documentId}`);
+      await dispatch('fetchDocuments');
+      commit('DELETE_DOCUMENT', documentId);
+    } catch (error) {
+      console.error('There was an error deleting the documents:', error);
+    }
   }
 };
 
@@ -90,3 +87,5 @@ export default {
   actions,
   getters
 };
+
+
