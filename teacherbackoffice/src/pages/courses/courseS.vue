@@ -73,7 +73,7 @@ export default {
   },
   async created() {
     try {
-      await this.fetchCourses(); // Fetch courses on creation
+      await this.fetchCourses(); 
     } catch (error) {
       console.error('Error fetching courses:', error);
     }

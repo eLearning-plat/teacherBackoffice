@@ -7,7 +7,7 @@
     <div class="grid-container">
       <div class="image-container">
         <img
-          :src="detail.imageUrl"
+          :src="detail.image"
           alt="Course"
           width="300"
           height="200"
@@ -49,7 +49,7 @@ import { List, Clock, Star } from 'lucide-vue-next';
 import CardContent from '@/components/ui/card/CardContent.vue'
 import Card from '@/components/ui/card/Card.vue'
 import CardFooter from '@/components/ui/card/CardFooter.vue'
-import { useAuth0 } from '@auth0/auth0-vue';
+
 
 export default {
   name: 'cardCourseTeacher',
@@ -68,14 +68,12 @@ export default {
     },
     
   },
-  setup() {
-      const { user } = useAuth0();
-console.log('user', user)  
+  setup() { 
   return {
         login: () => {
           loginWithRedirect();
         },
-        user
+        
       };
     },
   methods: {

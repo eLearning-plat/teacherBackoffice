@@ -1,10 +1,10 @@
 <template>
   <div class="container my-4">
     <BreadCrumb :links="links" :page="page" class="mt-2" />
-    <headerComponent />
+    <headerComponent  :category="category"/>
     <Card class="mt-3">
       <div class="flex flex-col min-h-[100dvh] bg-background mt-2 w-full">
-        <mainDocument />
+        <mainDocument :category="category"/>
         <footer><paginaTion /></footer>
       </div>
     </Card>
@@ -41,11 +41,7 @@ export default {
       ],
       perPage: 1,
       currentPage: 5,
-      items: [{ label: "Document" }],
-      home: {
-        icon: "pi pi-home",
-        to: "/",
-      },
+      category: "Arabic Language", 
     };
   },
 };

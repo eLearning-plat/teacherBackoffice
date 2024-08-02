@@ -35,13 +35,14 @@ const props = defineProps({
     <CardContent>
       <div class="grid gap-2">
         <img
+          v-if="courseDetail && courseDetail.image"
           alt="Product image"
           class="aspect-square w-full rounded-md object-cover"
           height="300"
-          :src="courseDetail.imageUrl"
+          :src="courseDetail.image"
           width="300"
         />
-       
+        <p v-else>No image available</p>
       </div>
     </CardContent>
   </Card>

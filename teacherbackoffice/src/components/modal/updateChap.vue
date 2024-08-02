@@ -84,7 +84,7 @@
         courseDescription: '',
         additionalCourses: '',
         files: [],
-        items: [{ date: '', url: '' }] // Liste d'inputs initiale
+        items: [{ date: '', url: '' }] 
       };
     },
     methods: {
@@ -108,12 +108,12 @@
         this.$emit('close');
       },
       addInput() {
-        this.items.push({ date: '', url: '' }); // Ajouter un nouvel objet d'inputs
+        this.items.push({ date: '', url: '' }); 
       },
       removeInput(index) {
-        // S'assurer qu'il reste au moins un ensemble d'inputs
+        
         if (this.items.length > 1) {
-          this.items.splice(index, 1); // Supprimer l'objet d'inputs à l'index spécifié
+          this.items.splice(index, 1); 
         }
       }
     }

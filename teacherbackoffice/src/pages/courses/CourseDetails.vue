@@ -20,17 +20,19 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
   courseDetail: Object,
+  coursId:String
 });
 const route = useRoute();
 const courseId = route.params.id;
 const course = ref(null);
 const store = useStore();
 const courses = computed(() => store.state.courses.courses);
-
+const category=ref(null)
 onMounted(async () => {
   try {
     course.value = await store.dispatch('courses/getCourseById', courseId);
     console.log('Fetched course:', course.value);
+    console.log('category',course.value.category)
   } catch (error) {
     console.error('Error fetching course details:', error);
   }
@@ -38,7 +40,8 @@ onMounted(async () => {
 
 watch(courses, (newCourses) => {
   const fetchedCourse = newCourses.find(course => course.id === courseId);
-  course.value = fetchedCourse || null;
+  value = fetchedCourse || null;
+
   console.log('Updated course:', course.value);
 });
 const links=[
@@ -77,8 +80,8 @@ const page = "Course details"
           </div>
           <div class="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
             <div class="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <CourseDetails :courseDetail="course"/>
-              <CourseCategory :courseDetail="course"/>
+              <CourseDetails :courseDetail="course" :category="category" :coursId="courseId"/>
+              <CourseCategory :courseDetail="course" :category="category" :coursId="courseId"/>
             </div>
             <div class="grid auto-rows-max items-start gap-4 lg:gap-8">
               <CourseStatus :courseDetail="course"/>

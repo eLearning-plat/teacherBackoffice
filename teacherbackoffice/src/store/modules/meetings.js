@@ -25,15 +25,13 @@ const mutations = {
 };
 
 const actions = {
- async fetchMeetings({ commit }) {
-  
-    return await axios.get('http://localhost:3000/api/meetings')
-      .then(async(response) => {
-        
+  async fetchMeetings({ commit }, query = {}) {
+    return await axios.get('http://localhost:3000/api/meetings', { params: query })
+      .then(async (response) => {
         const transformedMeetings = response.data.map(meeting => {
           return {
             ...meeting,
-            start: meeting.date, 
+            start: meeting.date,
             end: meeting.endDate,
             url: meeting.url,
             title: meeting.title || 'Default Title',
@@ -42,16 +40,40 @@ const actions = {
             }
           };
         });
-
-       await commit('SET_MEETINGS', transformedMeetings);
+  
+        await commit('SET_MEETINGS', transformedMeetings);
       })
       .catch(error => {
         console.error('There was an error fetching the meetings:', error);
       });
-  },
+  },  
+//  async fetchMeetings({ commit }) {
+  
+//     return await axios.get('http://localhost:3000/api/meetings')
+//       .then(async(response) => {
+        
+//         const transformedMeetings = response.data.map(meeting => {
+//           return {
+//             ...meeting,
+//             start: meeting.date, 
+//             end: meeting.endDate,
+//             url: meeting.url,
+//             title: meeting.title || 'Default Title',
+//             extendedProps: {
+//               description: meeting.description || 'No description provided'
+//             }
+//           };
+//         });
+
+//        await commit('SET_MEETINGS', transformedMeetings);
+//       })
+//       .catch(error => {
+//         console.error('There was an error fetching the meetings:', error);
+//       });
+//   },
   async addMeeting({ dispatch }, newEvent) {
     try {
-      
+      console.log("new meeting ", newEvent)
       const res = await axios.post('http://localhost:3000/api/meetings', newEvent);
      
       await dispatch('fetchMeetings'); 

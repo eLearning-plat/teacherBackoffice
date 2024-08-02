@@ -24,32 +24,37 @@ const mutations = {
 };
 
 const actions = {
-  fetchDocuments({ commit }) {
-    return axios.get('http://localhost:3000/api/documents')
+  fetchDocuments({ commit }, queryParams={}) {
+    console.log('param ',queryParams )
+    return axios.get('http://localhost:3000/api/documents',{params:queryParams})
+   
       .then(response => {
+        console.log('response', response.data)
         commit('SET_DOCUMENTS', response.data);
       })
       .catch(error => {
         console.error('There was an error fetching the documents:', error);
       });
   },
-  async adddocuments({ dispatch }, newdocuments) {
+  async addDocument({ dispatch }, { newDocument, categoryID,courseID }) {
     try {
-      console.log('newdocuments', newdocuments)
-      const res = await axios.post('http://localhost:3000/api/documents', newdocuments, {
+      console.log('newDocument', newDocument);
+      const res = await axios.post('http://localhost:3000/api/documents', newDocument, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-     console.log('res.data', res.data)
-      await dispatch('fetchDocuments'); 
- 
-      return res.data
+      
+      console.log('res.data', res.data);
+      console.log('categoryID', categoryID);
+      console.log('categoryID', courseID);
+      await dispatch('fetchDocuments', { categoryID,courseID });
+      return res.data;
     } catch (error) {
       console.error('Error adding document:', error);
       throw error; 
     }
-  },
+  },  
 
   async updatedocuments({ commit }, { id, updatedData }) {
     
