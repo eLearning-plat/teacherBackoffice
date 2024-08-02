@@ -28,21 +28,27 @@
             v-model="formattedStart" id="start" required
             class="w-full border-2 border-gray-400 text-gray-400 rounded-md p-2"
           />
-          
         </div>
-        <input
-  type="datetime-local"
-  v-model="formattedEnd" id="end" required
-  class="w-full border-2 border-gray-400 text-gray-400 rounded-md p-2"
-/>
-
+        <div class="mb-4">
+          <input
+            type="datetime-local"
+            v-model="formattedEnd" id="end" required
+            class="w-full border-2 border-gray-400 text-gray-400 rounded-md p-2"
+          />
+        </div>
         <div class="mb-4">
           <input
             type="url"
             v-model="event.url" id="url" required
             class="w-full border-2 border-gray-400 text-gray-400 rounded-md p-2"
           />
-          
+        </div>
+        <div class="mb-4">
+          <select v-model="selectedCourse" class="w-full border-2 border-gray-400 text-gray-400 rounded-md p-2">
+            <option v-for="course in courses" :key="course._id" :value="course._id">
+              {{ course.title }}
+            </option>
+          </select>
         </div>
         <div class="flex justify-end">
           <button
@@ -58,13 +64,14 @@
 </template>
 
 <script setup>
-import {computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 const props = defineProps({
   isOpen: Boolean,
   eventDetails: Object,
 });
+
 function formatDateForInput(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -75,6 +82,7 @@ function formatDateForInput(date) {
   const minutes = String(d.getMinutes()).padStart(2, '0');
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
+
 const formattedStart = computed(() => formatDateForInput(props.eventDetails.start));
 const formattedEnd = computed(() => formatDateForInput(props.eventDetails.end));
 
@@ -86,31 +94,51 @@ const event = ref({
   title: '',
   start: '',
   end: '',
-  url:'',
+  url: '',
   description: ''
 });
+
+const selectedCourse = ref('');
 
 const addEvent = async () => {
   const newEvent = {
     title: event.value.title,
     url: event.value.url,
     date: formattedStart.value,
-    endDate: formattedEnd.value,  // Check if this is correctly populated
-    description: event.value.description || 'No description provided'
+    endDate: formattedEnd.value,
+    description: event.value.description || 'No description provided',
+    courseId: selectedCourse.value
   };
 
   try {
+    console.log('newEvent ',newEvent)
     const response = await store.dispatch('meetings/addMeeting', newEvent);
-    emit('add-event', response); 
-    close(); 
+    emit('add-event', response);
+    resetForm();
+    close();
   } catch (error) {
     console.error('Failed to add event:', error);
   }
 };
 
+const resetForm = () => {
+  event.value = {
+    title: '',
+    start: '',
+    end: '',
+    url: '',
+    description: ''
+  };
+  selectedCourse.value = '';
+};
 
 const close = () => {
   emit('close');
 };
-</script>
 
+const courses = computed(() => store.getters['courses/allCourses']);
+
+onMounted(() => {
+  store.dispatch('courses/fetchCourses');
+});
+</script>

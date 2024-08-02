@@ -4,7 +4,6 @@
       <button @click="closeModal" class="absolute font-bold  right-6 text-gray-600 hover:text-gray-900">
         &times;
       </button>
-
       <div class="mb-2">
         <h2 class="text-xl font-semibold text-blue-600">{{ title }}</h2>
       </div>
@@ -35,9 +34,6 @@
               class="w-full border-2 text-gray-400 border-gray-400 rounded-md p-2"
             ></textarea>
           </div>
-          
-         
-          
           <div class="mb-4">
             <input
               type="file"
@@ -46,38 +42,6 @@
               class="border-2 border-gray-400 text-gray-400 rounded-md p-2 w-full"
             />
           </div>
-          <!-- <div class="border-2 border-gray-600 bg-gray-50 rounded-md p-3 max-h-100 overflow-y-auto">
-    <div v-for="(item, index) in items" :key="index" class="my-2 flex items-center">
-      <input
-        type="date"
-        v-model="item.date"
-        placeholder="01/05/2024"
-        class="w-1/3 mr-2 border-2 border-gray-700 rounded-md"
-      />
-      <input
-        type="url"
-        v-model="item.url"
-        placeholder="http://aaaaa"
-        class="w-2/3 ml-2 border-2 border-gray-700 rounded-md"
-      />
-      <div class="flex items-center">
-        <button
-          @click="addInput"
-          type="button"
-          class="mx-1 border-2 border-black bg-white text-black-600 rounded-full px-2 py-1 pi pi-plus"
-        >
-          
-        </button>
-        <button
-          @click="removeInput(index)"
-          type="button"
-          class="mx-1 border-2 border-black bg-white text-black-600 rounded-full px-2 py-1 pi pi-minus"
-        >
-        
-        </button>
-      </div>
-    </div>
-  </div> -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mt-3">
   <button
     type="submit"

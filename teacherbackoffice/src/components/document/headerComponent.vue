@@ -1,11 +1,6 @@
 <template>
-    <header class="sticky mt-3 top-0 z-30 border-b bg-background px-4 sm:static sm:border-0 sm:bg-transparent sm:px-6">
+  <header class="sticky mt-3 top-0 z-30 border-b bg-background px-4 sm:static sm:border-0 sm:bg-transparent sm:px-6">
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-      <!-- BreadCrumb section -->
-      <div class="w-full sm:w-auto">
-       
-      </div>
-      <!-- Search and button section -->
       <div class="flex flex-col sm:flex-row w-full sm:w-auto items-center gap-4">
         <div class="relative flex-grow sm:flex-grow-0 w-full sm:w-auto">
           <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -26,51 +21,69 @@
       </div>
     </div>
     <ModalAddDocument
+    :category="category"
       v-if="isModalOpen"
       :isOpen="isModalOpen"
       title="Add New Document"
       buttonText="Add Document"
-      @add-Document="addCourse"
+      @add-document="submitDocument"
       @close="closeModal"
     />
   </header>
 </template>
-<script >
+
+<script>
 import Input from '../ui/input/Input.vue'
-import {ChevronLeft, Search} from 'lucide-vue-next'
+import { ChevronLeft, Search } from 'lucide-vue-next'
 import ModalAddDocument from "@/components/modal/modalAddDocument.vue";
+import { mapActions,mapState } from 'vuex';
+
 export default {
-    components:{
-        ModalAddDocument,
-        ChevronLeft,
-         Search,
-         Input
+  components: {
+    ModalAddDocument,
+    ChevronLeft,
+    Search,
+    Input
+  },
+  props: {
+    category: {
+      type: String,
+      required: true,
     },
-    data() {
+  },
+  data() {
     return {
       searchQuery: '',
       isModalOpen: false,
-      rows: 100,     
-     
-      perPage: 1, 
+      rows: 100,
+      perPage: 1,
       currentPage: 5,
     };
   },
   methods: {
+    ...mapActions('documents', ['addDocument']),
     openModal() {
       this.isModalOpen = true;
     },
     closeModal() {
       this.isModalOpen = false;
     },
-    addCourse() {
-      this.closeModal();
-    }
+    async submitDocument({ newDocument, categoryID }) {
+  try {
+    console.log('newDocument', newDocument);
+    await this.addDocument({ newDocument, categoryID });
+    this.closeModal();
+  } catch (error) {
+    console.error('Error adding document:', error);
+  }
+}
+
   },
   computed: {
+    ...mapState('documents', ['documents']),
     filteredItems() {
       const query = this.searchQuery.toLowerCase();
-      return this.details.filter(item => 
+      return this.details.filter(item =>
         item.title.toLowerCase().includes(query) &&
         (this.selectedFilter === '' || item.category === this.selectedFilter)
       );
@@ -78,3 +91,4 @@ export default {
   }
 }
 </script>
+

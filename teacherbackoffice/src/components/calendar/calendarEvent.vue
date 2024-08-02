@@ -153,6 +153,7 @@ function handleEventDrop(eventDropInfo) {
         date: updatedEvent.start,
         endDate: updatedEvent.end,
         url: updatedEvent.url,
+        
         description: updatedEvent.description,
       },
     })
