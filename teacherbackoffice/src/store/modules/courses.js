@@ -1,6 +1,6 @@
 // store/modules/courses.js
 import axios from 'axios';
-
+const apiUrl = import.meta.env.VITE_APP_API_URL;
 const state = {
   courses: []
 };
@@ -25,7 +25,7 @@ const mutations = {
 
 const actions = {
   fetchCourses({ commit }) {
-    return axios.get('http://localhost:3000/api/courses')
+    return axios.get(`${apiUrl}/courses`)
       .then(response => {
         commit('SET_COURSES', response.data);
       })
@@ -40,7 +40,7 @@ const actions = {
         return course;
       }
 
-      const response = await axios.get(`http://localhost:3000/api/courses/${courseId}`);
+      const response = await axios.get(`${apiUrl}/courses/${courseId}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching course by ID:', error);
@@ -50,7 +50,7 @@ const actions = {
   async addCourses({ dispatch }, newCourse) {
     try {
       console.log('newCourse', newCourse)
-      const res = await axios.post('http://localhost:3000/api/courses', newCourse, {
+      const res = await axios.post(`${apiUrl}/courses`, newCourse, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -68,7 +68,7 @@ const actions = {
   async updateCourses({ commit }, { id, updatedData }) {
     
       try{
-      await axios.put(`http://localhost:3000/api/courses/${id}`, updatedData)
+      await axios.put(`${apiUrl}/courses/${id}`, updatedData)
         commit('UPDATE_COURSES', updatedcourses);
       }
       catch(error){
@@ -76,7 +76,7 @@ const actions = {
       };
   },
  async deleteCourses({ commit , dispatch}, courseId) {
-    return await axios.delete(`http://localhost:3000/api/courses/${courseId}`)
+    return await axios.delete(`${apiUrl}/courses/${courseId}`)
 
       .then(async() => {
         await dispatch('fetchCourses'); 
