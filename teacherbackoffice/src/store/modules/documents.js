@@ -24,8 +24,8 @@ const mutations = {
 };
 
 const actions = {
-  fetchDocuments({ commit }) {
-    return axios.get('http://localhost:3000/api/documents')
+  fetchDocuments({ commit }, queryParams={}) {
+    return axios.get('http://localhost:3000/api/documents',{params:queryParams})
       .then(response => {
         commit('SET_DOCUMENTS', response.data);
       })

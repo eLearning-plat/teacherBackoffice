@@ -8,6 +8,6 @@
 <script setup>
 import calendarEvent from "../../components/calendar/calendarEvent.vue";
 import BreadCrumb from "../../components/bread-crumb/BreadCrumb.vue";
-const links = [{ id: 1, title: "Student Space", link: "/" }];
+const links = [{ id: 1, title: "Teacher Space", link: "/" }];
 const page = "Event";
 </script>

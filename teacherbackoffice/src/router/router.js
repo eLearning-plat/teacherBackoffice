@@ -56,7 +56,6 @@ const routes = [
  
   {path:"/", name:'dashBord', component:()=>import('../pages/dashbord/dashBord.vue')},
   { path: "/event", name: 'eventPage', component: () => import('../pages/events/eventPage.vue') },
-  { path: "/document", name: 'documentPage', component: () => import('../pages/document/documentPage.vue') },
   { path: "/profile", name: "profilePage", component: () => import('../pages/profile/profilePage.vue') },
   { path: "/courseDetails/:id", name: "CourseDetails", component: () => import('../pages/courses/CourseDetails.vue') },
   { path: "/AddCourse", name: "AddCourse", component: () => import('../pages/courses/AddCourse.vue') },

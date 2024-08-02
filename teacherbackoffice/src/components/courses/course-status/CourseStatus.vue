@@ -24,7 +24,12 @@ const props = defineProps({
       <CardTitle>Course Category</CardTitle>
     </CardHeader>
     <CardContent>
-   
+      <p v-if="courseDetail && courseDetail.category">
+        {{ courseDetail.category }}
+      </p>
+      <p v-else>
+        No category available.
+      </p>
     </CardContent>
   </Card>
 </template>

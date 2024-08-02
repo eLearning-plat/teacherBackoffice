@@ -108,9 +108,7 @@ watch(
       const calendarApi = calendarRef.value.getApi();
       calendarApi.removeAllEvents();
       calendarApi.addEventSource(transformedMeetings);
-    } else {
-      console.error("Calendar reference is null");
-    }
+    } 
   },
   { immediate: true }
 );

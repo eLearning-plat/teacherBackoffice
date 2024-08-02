@@ -4,7 +4,7 @@
     <headerComponent />
     <Card class="mt-3">
       <div class="flex flex-col min-h-[100dvh] bg-background mt-2 w-full">
-        <mainDocument />
+        <mainDocument :category="category"/>
         <footer><paginaTion /></footer>
       </div>
     </Card>
@@ -31,8 +31,8 @@ export default {
     return {
       searchQuery: "",
       isModalOpen: false,
-      rows: 100, // Nombre total de lignes à paginer
-      perPage: 1, // Nombre d'éléments par page
+      rows: 100, 
+      perPage: 1, 
       currentPage: 5,
       page: "Document > Computer",
       links: [
@@ -42,11 +42,7 @@ export default {
           link: "",
         },
       ],
-      items: [{ label: "Document" }],
-      home: {
-        icon: "pi pi-home",
-        to: "/",
-      },
+      category: "sonna", 
     };
   },
   methods: {
@@ -57,7 +53,7 @@ export default {
       this.isModalOpen = false;
     },
     addCourse() {
-      // Logic for adding the course
+    
       this.closeModal();
     },
   },
