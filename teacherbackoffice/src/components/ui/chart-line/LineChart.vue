@@ -63,6 +63,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
       <ChartCrosshair v-if="showTooltip" :colors="colors" :items="legendItems" :index="index" :custom-tooltip="customTooltip" />
 
       <template v-for="(category, i) in categories" :key="category">
+        <!-- @vue-expect-error -->
         <VisLine
           :x="(d: Data, i: number) => i"
           :y="(d: Data) => d[category]"

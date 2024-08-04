@@ -32,7 +32,7 @@ function template(d: any) {
     return componentDiv.innerHTML
   }
 }
-
+// @ts-expect-error
 function color(d: unknown, i: number) {
   return props.colors[i] ?? 'transparent'
 }

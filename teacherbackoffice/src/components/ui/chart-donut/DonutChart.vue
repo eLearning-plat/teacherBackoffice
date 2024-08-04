@@ -79,6 +79,7 @@ const totalValue = computed(() => props.data.reduce((prev, curr) => {
         :central-label="type === 'donut' ? valueFormatter(totalValue) : ''"
         :events="{
           [Donut.selectors.segment]: {
+            //@ts-expect-error
             click: (d: Data, ev: PointerEvent, i: number, elements: HTMLElement[]) => {
               if (d?.data?.[index] === activeSegmentKey) {
                 activeSegmentKey = undefined
