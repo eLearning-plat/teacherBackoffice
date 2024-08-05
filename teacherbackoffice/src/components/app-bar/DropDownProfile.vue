@@ -8,6 +8,21 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/vue";
+import Button from "../ui/button/Button.vue";
+import { useAuth0 } from "@auth0/auth0-vue";
+
+const auth0 = useAuth0();
+const user = auth0.user;
+const isAuthenticated = auth0.isAuthenticated;
+const apiUrl = import.meta.env.VITE_APP_API_URL_LOCAL;
+
+function logout() {
+  auth0.logout({
+    logoutParams: {
+      returnTo: "http://localhost:5143",
+        },
+  });
+}
 </script>
 
 <template>
@@ -58,13 +73,13 @@ import {
         </MenuItem>
         <MenuItem v-slot="{ active }">
           <a
-            href="#"
+             @click="logout"
+            :href="apiUrl"
             :class="[
               active ? 'bg-gray-100' : '',
               'block px-4 py-2 text-sm text-gray-700',
             ]"
-            >Sign out</a
-          >
+            >Sign out</a>
         </MenuItem>
       </MenuItems>
     </transition>
