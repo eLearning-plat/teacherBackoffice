@@ -17,6 +17,7 @@
 <script>
 import cardsDocument from "../cards/cardsDocument.vue";
 import { mapState, mapActions } from 'vuex';
+import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   components: {
@@ -34,12 +35,18 @@ export default {
       required: true,
     },
   },
+  setup() {
+    const { getAccessTokenSilently } = useAuth0();
+    return { getAccessTokenSilently };
+  },
   methods: {
     ...mapActions('documents', ['fetchDocuments', 'deletedocuments']),
     async deleteDocument(docId) {
       try {
+        const token = await this.getAccessTokenSilently();
+
         console.log('Deleting document with id:', docId);
-        await this.deletedocuments(docId);
+        await this.deletedocuments(docId,token);
       
         await this.loadDocuments();
         console.log('Document deleted successfully');
@@ -49,11 +56,13 @@ export default {
     },
     async loadDocuments() {
       try {
+        const token = await this.getAccessTokenSilently();
+
         const queryParams = {
           categoryID: this.category,
         };
         console.log('Fetching documents with params:', queryParams);
-        await this.fetchDocuments(queryParams);
+        await this.fetchDocuments(queryParams, token);
       } catch (error) {
         console.error('Error loading documents:', error);
       }
@@ -63,9 +72,7 @@ export default {
   ...mapState('documents', ['documents']),
   filteredDocuments() {
     const query = this.searchQuery.toLowerCase();
-    
-    // Si searchQuery est vide, retourner tous les documents
-    if (!query) {
+        if (!query) {
       return this.documents;
     }
     

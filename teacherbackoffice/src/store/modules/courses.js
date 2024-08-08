@@ -25,15 +25,12 @@ const mutations = {
 };
 
 const actions = {
-  async fetchCourses({ commit }) {
-    const { getAccessTokenSilently } = useAuth0();
+  async fetchCourses({ commit }, token) {
     try {
-      const token = await getAccessTokenSilently();
-      console.log('token', token);
   
       const response = await axios.get(`${apiUrl}/courses`, {
         headers: {
-          Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         }
       });
       
@@ -43,19 +40,16 @@ const actions = {
     }
   },
   
-  async  getCourseById({ state }, courseId) {
-    const { getAccessTokenSilently } = useAuth0();
-
+  async  getCourseById({ state }, {courseId, token}) {
     try {
       const course = state.courses.find(course => course.id === courseId);
       if (course) {
         return course;
       }
-  
-      const token = await getAccessTokenSilently();
+
       const response = await axios.get(`${apiUrl}/courses/${courseId}`, {
         headers: {
-          Authorization: `Bearer ${token}`
+           Authorization: `Bearer ${token}`
         }
       });
       
@@ -66,14 +60,9 @@ const actions = {
     }
   },
   
-  async addCourses({ dispatch }, newCourse) {
-    const { getAccessTokenSilently } = useAuth0();
-
+  async addCourses({ dispatch }, {newCourse,token}) {
     try {
-      const token = await getAccessTokenSilently();
-      console.log('newCourse', newCourse);
-  
-      const res = await axios.post(`${apiUrl}/courses`, newCourse, {
+    const res = await axios.post(`${apiUrl}/courses`, newCourse, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -82,19 +71,17 @@ const actions = {
       
       console.log('res.data', res.data);
       await dispatch('fetchCourses'); 
-  
       return res.data;
     } catch (error) {
-      console.error('Error adding course:', error);
       throw error;
     }
   },
   
-  async updateCourses({ commit }, { id, updatedData }) {
-    const { getAccessTokenSilently } = useAuth0();
+  async updateCourses({ commit }, { id, updatedData , token}) {
+
 
     try {
-      const token = await getAccessTokenSilently();
+
       await axios.put(`${apiUrl}/courses/${id}`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -108,11 +95,10 @@ const actions = {
     }
   },
   
-  async deleteCourses({ commit, dispatch }, courseId) {
-    const { getAccessTokenSilently } = useAuth0();
+  async deleteCourses({ commit, dispatch }, {courseId, token}) {
 
     try {
-      const token = await getAccessTokenSilently();
+
       await axios.delete(`${apiUrl}/courses/${courseId}`, {
         headers: {
           Authorization: `Bearer ${token}`

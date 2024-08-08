@@ -59,6 +59,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ModalAddDocument',
   props: {
@@ -88,7 +89,7 @@ export default {
       courseTitle: '',
       courseDescription: '',
       categoryID: this.category,
-      courseID:this.coursId ||'',
+      courseID:this.coursId ||'1',
       userID: '1',
       file: null
     };

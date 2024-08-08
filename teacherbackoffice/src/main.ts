@@ -24,6 +24,6 @@ app.use(
       redirect_uri: window.location.origin
     }
   })
-);
+); 
 app.use(FlagIcon);
 app.mount('#app')

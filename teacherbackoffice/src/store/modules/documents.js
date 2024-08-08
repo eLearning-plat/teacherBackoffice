@@ -26,55 +26,73 @@ const mutations = {
 };
 
 const actions = {
-  fetchDocuments({ commit }, queryParams = {}) {
+  fetchDocuments({ commit }, { queryParams = {}, token }) {
     console.log('param', queryParams);
-    return axios.get(`${apiUrl}/documents`, { params: queryParams })
-      .then(response => {
-        console.log('response', response.data);
-        commit('SET_DOCUMENTS', response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the documents:', error);
-      });
+    return axios.get(`${apiUrl}/documents`, {
+      params: queryParams,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      console.log('response', response.data);
+      commit('SET_DOCUMENTS', response.data);
+    })
+    .catch(error => {
+      console.error('There was an error fetching the documents:', error);
+    });
   },
-  async addDocument({ dispatch }, { newDocument, categoryID, courseID }) {
+
+  async addDocument({ dispatch }, { newDocument, categoryID, courseID, token }) {
     try {
       console.log('newDocument', newDocument);
       const res = await axios.post(`${apiUrl}/documents`, newDocument, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       });
 
       console.log('res.data', res.data);
       console.log('categoryID', categoryID);
       console.log('courseID', courseID);
-      await dispatch('fetchDocuments', { categoryID, courseID });
+      await dispatch('fetchDocuments', { categoryID, courseID, token });
       return res.data;
     } catch (error) {
       console.error('Error adding document:', error);
       throw error;
     }
   },
-  async updatedocuments({ commit }, { id, updatedData }) {
+
+  async updateDocuments({ commit }, { id, updatedData, token }) {
     try {
-      const response = await axios.put(`${apiUrl}/documents/${id}`, updatedData);
+      const response = await axios.put(`${apiUrl}/documents/${id}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       commit('UPDATE_DOCUMENT', response.data);
     } catch (error) {
       console.error('Error updating document:', error);
       throw error;
     }
   },
-  async deletedocuments({ commit, dispatch }, documentId) {
+
+  async deleteDocuments({ commit, dispatch }, { documentId, token }) {
     try {
-      await axios.delete(`${apiUrl}/documents/${documentId}`);
-      await dispatch('fetchDocuments');
+      await axios.delete(`${apiUrl}/documents/${documentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      await dispatch('fetchDocuments', { token });
       commit('DELETE_DOCUMENT', documentId);
     } catch (error) {
       console.error('There was an error deleting the documents:', error);
     }
   }
 };
+
 
 const getters = {
   allDocuments: state => state.documents

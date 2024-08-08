@@ -37,6 +37,7 @@ import Input from '../ui/input/Input.vue'
 import { ChevronLeft, Search } from 'lucide-vue-next'
 import ModalAddDocument from "@/components/modal/modalAddDocument.vue";
 import { mapActions,mapState } from 'vuex';
+import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   components: {
@@ -59,6 +60,9 @@ export default {
       perPage: 1,
       currentPage: 5,
     };
+  },setup() {
+    const { getAccessTokenSilently } = useAuth0();
+    return { getAccessTokenSilently };
   },
   methods: {
     ...mapActions('documents', ['addDocument']),
@@ -70,8 +74,10 @@ export default {
     },
     async submitDocument({ newDocument, categoryID }) {
   try {
+    const token = await this.getAccessTokenSilently();
+
     console.log('newDocument', newDocument);
-    await this.addDocument({ newDocument, categoryID });
+    await this.addDocument({ newDocument, categoryID ,token});
     this.closeModal();
   } catch (error) {
     console.error('Error adding document:', error);
