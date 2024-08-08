@@ -19,8 +19,10 @@ import CourseCategoryAdd from '../../components/courses/course-category/CourseCa
 import CourseImagesAdd from '../../components/courses/course-images/CourseImagesAdd.vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router';
+import { useAuth0 } from "@auth0/auth0-vue";
 const router = useRouter();
-const store = useStore()
+const store = useStore();
+const auth0 = useAuth0();
 const links=[
     {
         id: 1,
@@ -46,16 +48,24 @@ const newCourse = ref({
 
 async function handleAddCourse() {
   try {
-    await store.dispatch('courses/addCourses',
-    newCourse.value = {
-      title:  newCourse.value.details.title,
+    const token = await auth0.getAccessTokenSilently(); // Récupère le token d'Auth0
+
+    const newCourseData = {
+      title: newCourse.value.details.title,
       description: newCourse.value.details.description,
       image: newCourse.value.details.image,
-      category: newCourse.value.category.category
+      category: newCourse.value.category.category,
+      userId: 1
+    };
+
+    await store.dispatch('courses/addCourses', {
+      newCourse: newCourseData,
+      token: token // Passe le token ici
     });
+
     router.push('/course');
   } catch (error) {
-    console.error('Error adding course:', error);
+    throw error;
   }
 }
 const page = "Course details"

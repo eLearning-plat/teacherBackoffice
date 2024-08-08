@@ -22,6 +22,7 @@ import asideBar from '@/components/bogs/asideBar.vue';
 import blogModal from '@/components/modal/blogModal.vue';
 import cardBlog from '@/components/cards/cardBlog.vue';
 import { mapActions, mapState } from 'vuex';
+import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   name: "blogPage",
@@ -35,6 +36,10 @@ export default {
       isModalVisible: false
     };
   },
+  setup() {
+    const { getAccessTokenSilently } = useAuth0();
+    return { getAccessTokenSilently };
+  },
   methods: {
     ...mapActions('blogs', ['fetchBlogs']),
     openModal() {
@@ -44,16 +49,16 @@ export default {
       this.isModalVisible = false;
     }
   },
-  created() {
-    console.log('component created');
-    this.fetchBlogs()
-      .then(() => {
-        console.log('blogs fetched', this.blogs);
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  },
+  async created() {
+  try {
+    const token = await this.getAccessTokenSilently();
+    console.log('component created',token);
+    await this.fetchBlogs(token);
+    console.log('blogs fetched', this.blogs);
+  } catch (error) {
+    console.log('error', error);
+  }
+},
   computed: {
     ...mapState('blogs', ['blogs'])
   }

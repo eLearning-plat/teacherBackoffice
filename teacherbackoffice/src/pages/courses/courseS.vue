@@ -32,6 +32,7 @@ import cardCourseTeacher from '@/components/cards/cardCourseTeacher.vue';
 import paginaTion from '@/components/pagination/paginaTion.vue';
 import CardContent from '../../components/ui/card/CardContent.vue';
 import CoursesHeader from '../../components/courses/courses-toolbar/CoursesHeader.vue';
+import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   name: 'CoursePage',
@@ -46,15 +47,19 @@ export default {
     return {
       searchQuery: '',
       selectedFilter: '',
-      page:'Courses',
-      links:[
-    {
-        id: 1,
-        title: 'Teacher Space',
-        link: '',
-    }
-]
+      page: 'Courses',
+      links: [
+        {
+          id: 1,
+          title: 'Teacher Space',
+          link: '',
+        }
+      ]
     };
+  },
+  setup() {
+    const { getAccessTokenSilently } = useAuth0();
+    return { getAccessTokenSilently };
   },
   methods: {
     ...mapActions('courses', ['fetchCourses', 'deleteCourses']),
@@ -63,8 +68,9 @@ export default {
     },
     async deleteCourse(courseId) {
       try {
-        await this.deleteCourses(courseId);
-        await this.fetchCourses(); 
+        const token = await this.getAccessTokenSilently(); 
+        await this.deleteCourses(courseId, token);
+        await this.fetchCourses(token); 
         console.log('Course deleted successfully');
       } catch (error) {
         console.error('Error deleting course:', error);
@@ -73,7 +79,8 @@ export default {
   },
   async created() {
     try {
-      await this.fetchCourses(); 
+      const token = await this.getAccessTokenSilently(); 
+      await this.fetchCourses(token); 
     } catch (error) {
       console.error('Error fetching courses:', error);
     }
@@ -92,6 +99,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .custom-select {

@@ -24,20 +24,28 @@ const mutations = {
 };
 
 const actions = {
-  fetchBlogs({ commit }) {
-    return axios.get(`${apiUrl}/blogs`)
-      .then(response => {
-        commit('SET_BLOGS', response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the blogs:', error);
-      });
+  fetchBlogs({ commit }, token) {
+    console.log('token', token)
+    return axios.get(`${apiUrl}/blogs`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      commit('SET_BLOGS', response.data);
+      console.log(reponse.data)
+    })
+    .catch(error => {
+      console.error('There was an error fetching the blogs:', error);
+    });
   },
-  async addBlogs({ dispatch }, bnewBlogs) {
+  
+  async addBlogs({ dispatch }, {bnewBlogs,token}) {
     try {
       console.log('bnewBlogs', bnewBlogs)
       const res = await axios.post(`${apiUrl}/blogs`, bnewBlogs, {
         headers: {
+            Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
@@ -51,27 +59,34 @@ const actions = {
     }
   },
 
-  async updateBlogs({ commit }, { id, updatedData }) {
-    
-      try{
-      await axios.put(`${apiUrl}/blogs/${id}`, updatedData)
-        commit('UPDATE_BLOGS', updatedblogs);
-      }
-      catch(error){
-    
-      };
-  },
- async deleteblogs({ commit , dispatch}, blogId) {
-    return await axios.delete(`${apiUrl}/blogs/${blogId}`)
-
-      .then(async() => {
-        await dispatch('fetchBlogs'); 
-        commit('DELETE_BLOGS', blogId);
-      })
-      .catch(error => {
-        console.error('There was an error deleting the blogs:', error);
+  async updateBlogs({ commit }, { id, updatedData, token }) {
+    try {
+      const response = await axios.put(`${apiUrl}/blogs/${id}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
+      commit('UPDATE_BLOGS', response.data);
+    } catch (error) {
+      console.error('There was an error updating the blog:', error);
+    }
+  },
+  
+  async deleteblogs({ commit, dispatch }, { token, blogId }) {
+    return await axios.delete(`${apiUrl}/blogs/${blogId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(async () => {
+      await dispatch('fetchBlogs'); 
+      commit('DELETE_BLOGS', blogId);
+    })
+    .catch(error => {
+      console.error('There was an error deleting the blogs:', error);
+    });
   }
+  
 };
 
 const getters = {
